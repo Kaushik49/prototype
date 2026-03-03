@@ -21,8 +21,8 @@ The server is called the signaling server for bootstrapin the communication
 
 Network address translation(NAT) is for distrubuting the ip from router to the device connected via port 
 
-![NAT architecture](./images/NAT.png)
+![alt text](./images/NAT.png)
 
-** Stun gives you the publically accessible IP's. It shows you how the world sees you **
+**Stun gives you the publically accessible IP's. It shows you how the world sees you**
 
 ![stun ](./images/stun_server.png)
