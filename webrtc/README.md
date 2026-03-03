@@ -10,7 +10,7 @@ We will build peer to peer application
 -HRS => 10s delay => best for cricket matches for prime quality
 -WebRTC => 0.1 s delay for => meet/omegle
 
-![architecture diagram](./images/architecture.png)  
+![architecture diagram](/webrtc/images/architecture.png)  
 
 >[!Note]
 >But you still need the server to know the address of the person before they connect directly to each other , so you need the central server, like a websocket server. Like you need a phone number of friend to dial and connect to your friend. In this case the phone number is ip address through the telecomm provide i.e. server in this case.
@@ -21,8 +21,8 @@ The server is called the signaling server for bootstrapin the communication
 
 Network address translation(NAT) is for distrubuting the ip from router to the device connected via port 
 
-![alt text](./images/NAT.png)
+![NAT architecture](/webrtc/images/NAT.png)
 
 **Stun gives you the publically accessible IP's. It shows you how the world sees you**
 
-![stun ](./images/stun_server.png)
+![STUN architecture ](/webrtc/images/stun_server.png)
