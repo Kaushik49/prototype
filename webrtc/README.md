@@ -125,7 +125,3 @@ SFU => forward packets  => doesn't need to decode video
 MCU => does need to decode the video (ffmped) => merge the data  => re -encode the data
 which is MCU is very expensive
 open source SFU -- janus, jitsy, media soup , pion
-
-
-Incase for youtube live streaming you use HLS(http live streaming)
-
