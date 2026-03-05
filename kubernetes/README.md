@@ -16,3 +16,16 @@ Kubernetes is a container orchestration engine , which lets you create, delete a
 3. If you want want a dashboard of want the container is doing or want to autoscale to some extent, like load balancing.
 
 ![kubernetes architecture](./images/kubernetes.png)
+
+the thing that master node starts is a called pod,
+
+![Note]
+>pod is not a worker neither a container as a single pod can run many containers.
+
+Here what a typical architecture looks like in micro detail. 
+![micro_unit](./images/micro_unit.png)
+
+Here was what the subset looks like 
+![subet of every entity](./images/subset.png)
+
+
