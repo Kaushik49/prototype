@@ -1,80 +1,111 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react";
 
 export const Sender = () => {
-    // creating state variables 
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const [pc, setPC] = useState<RTCPeerConnection | null>(null);
-    // use effect once ther is socket connection for rendering when there is socket 
+
+    // 1. Use a ref to attach the media stream to the video element
+    const videoRef = useRef<HTMLVideoElement>(null);
+
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:8080');
-        setSocket(socket);
-        socket.onopen = () => {
-            socket.send(JSON.stringify({
+        const ws = new WebSocket('ws://localhost:8080');
+        setSocket(ws);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
                 type: 'sender'
             }));
-        }
+        };
+
+        // Cleanup function to close the socket when the component unmounts
+        return () => {
+            ws.close();
+        };
     }, []);
-    // initializing the connection 
 
     const initiateConn = async () => {
-        // checks if there is socket
         if (!socket) {
             alert("Socket not found");
             return;
         }
-        // frist captures if there has been any answer from the other browser in ws 
+
+        // 2. Initialize the PeerConnection BEFORE using it in event listeners
+        const peerConnection = new RTCPeerConnection({
+            // iceServers:[{ urls: 'stun:stun.l.google.com:19302' }] // Add STUN servers for a real-world app
+        });
+        setPC(peerConnection);
+
         socket.onmessage = async (event) => {
             const message = JSON.parse(event.data);
             if (message.type === 'createAnswer') {
-                await pc.setRemoteDescription(message.sdp);
+                await peerConnection.setRemoteDescription(message.sdp);
             } else if (message.type === 'iceCandidate') {
-                pc.addIceCandidate(message.candidate);// adds the icecandidate
+                await peerConnection.addIceCandidate(message.candidate);
             }
-        }
-        // creates a new Peer
-        const pc = new RTCPeerConnection();
-        setPC(pc);
-        //sends its candidate in 
-        pc.onicecandidate = (event) => {
+        };
+
+        peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
-                socket?.send(JSON.stringify({
+                socket.send(JSON.stringify({
                     type: 'iceCandidate',
                     candidate: event.candidate
                 }));
             }
-        }
+        };
 
-        pc.onnegotiationneeded = async () => {
-            console.error("onnegotiateion needed");
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            socket?.send(JSON.stringify({
+        peerConnection.onnegotiationneeded = async () => {
+            console.log("onnegotiationneeded");
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.send(JSON.stringify({
                 type: 'createOffer',
-                sdp: pc.localDescription
+                sdp: peerConnection.localDescription
             }));
-        }
-            
-        getCameraStreamAndSend(pc);
-    }
+        };
 
-    const getCameraStreamAndSend = (pc: RTCPeerConnection) => {
-        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            const video = document.createElement('video');
-            video.srcObject = stream;
-            video.play();
-            // this is wrong, should propogate via a component
-            document.body.appendChild(video);
+        await getCameraStreamAndSend(peerConnection);
+    };
+
+    const getCameraStreamAndSend = async (peerConnection: RTCPeerConnection) => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+
+            // Assign the stream to the React video component
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+
             stream.getTracks().forEach((track) => {
-                console.error("track added");
-                console.log(track);
-                console.log(pc);
-                pc?.addTrack(track);
+                console.log("track added", track);
+                // 3. Pass the stream as the second argument so the receiver can synchronize tracks
+                peerConnection.addTrack(track, stream);
             });
-        });
-    }
+        } catch (error) {
+            console.error("Error accessing media devices:", error);
+        }
+    };
 
-    return <div>
-        Sender
-        <button onClick={initiateConn}> Send data </button>
-    </div>
-}
+    return (
+        <div>
+            <h2>Sender</h2>
+            {/* Disable the button once the connection has been initiated to prevent duplicates */}
+            <button onClick={initiateConn} disabled={!!pc}>
+                Send data
+            </button>
+
+            <div style={{ marginTop: "20px" }}>
+                {/* 
+                  autoPlay, playsInline, and muted are critical for 
+                  browsers to allow video playback without user interaction 
+                */}
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    style={{ width: '400px', backgroundColor: '#222', borderRadius: '8px' }}
+                />
+            </div>
+        </div>
+    );
+};
