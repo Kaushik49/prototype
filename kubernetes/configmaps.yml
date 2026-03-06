@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-configmap
+data:
+  'database_url': 'http://mongodb.com'
+  'payment_gateway_url': 'https://stripe.com'
+  'cache_size': '1000'
+  #process.env.database_url
+  #file like keys
+  application.properties: |
+  app.name = ecom-backend
+  app.environment = production
+  # you can read these files with using readConfigFile('/etc/config/application.production')
+  # but you need to import fs in javascript or file library in python

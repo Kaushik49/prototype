@@ -1,0 +1,27 @@
+metadata: 
+  name: web-apps-ingress # name of the ingress controller 
+  annotations:
+    # This ensures that /nginx is stripped before hitting the pod
+    #nginx/api/v1/user => api/v1/user that can be handled by express server
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rps:10 # we are adding the rate limiting
+spec:
+  ingressClassName: nginx # what kind of ingress controller you are using , maybe trafeik or Haproxy
+  rules:
+  - host: your-domain.com # whenever somebody  hits this domain
+    http:
+      paths:
+      - path: /nginx # if they are in this path then forward it to nginx
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
+      - path: /apache # if they are in this path forward it to apache service
+        pathType: Prefix
+        backend:
+          service:
+            name: apache-service # this is how they find the pods throught service cluster IP
+            port:
+              number: 80

@@ -128,7 +128,7 @@ things left to learn
 2. Ingress
 3. Ingress Controller
     - nginx
-    - traefik
+    - traefik : another type of ingress controller
 4. configMaps
 5. secrets
 ----
@@ -171,6 +171,23 @@ winget install Helm.Helm
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm install nginx-ingress ingress-nginx/ingress-nginx
+helm install nginx-ingress ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx \
+  --create-namespace
 
 ```
+
+![ingress architecture](./images/ingress.png)
+
+inorder to tell to which services should one ingress should route to we need to 
+
+### secrets and configmaps
+
+kubernetes suggest some standard configuration practices
+1. never create pod without deployment
+2. write your configuration with Yaml file
+3. configuration file should be stored in version control before they are pushed to the cluster.
+
+1. configmaps: are designed to store non-sensitive configuration data such as configuration files, environment variables or command-line arguments
+2. secrets : are designed to store sensitive information such as passwords , Oauth , tokens and ssh keys. You have to encode it in base64, since it is volatile(you need to update it frequently).You store in final secrets in cloud provider vaults
+
