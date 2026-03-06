@@ -95,8 +95,82 @@ A Deployment is a higher level abstraction that manages a set of pods and provid
 
 ```bash
 kubectl create deployment <deployment_name> --image=nginx --replicas=4 # creates a nginx pod with four replica set
-
+kubectl get deployment
 ```
 
 ### Replicasets
+Deployment => replicaset => pods
+- A deployment does not actually create pods but a replicaset does. A deployment is responsible for creating a stable set of replcaset in the cluster.
+```bash
+kubectl get rs # to get the replicaset
+kubectl apply -f replicaset.yml 
+kubectl delete rs nginx-replicaset
+kubectl logs <deployment_name>
+```
+incase if you make changes in the existing deployment by tampering with container image , which it is already running , then it creates another replicaset , that means you have two replicaset. If something goes wrong with newly formed replicaset then the old replicaset is still left to roll back upon.
 
+### services
+
+- a service is an abstraction that defines a logical set of pods a policy by which you can access them. It is a way to expose applications running on a set of pods as a network service. 
+
+
+- cluster IP => exposes the cluster through a   clusterIP
+- NodePort exposes the node to outside world
+- LoadBalancer : balances the load of incoming services to different nods, it will be different from the cluster, even if you delete the cluster, it does not get deleted.
+>[!Note]
+>you need to map the port before you visit the port of the node. 
+
+
+
+----
+things left to learn
+1. Namespaces
+2. Ingress
+3. Ingress Controller
+    - nginx
+    - traefik
+4. configMaps
+5. secrets
+----
+1. cert management
+2. volumes and persistant volumes
+3. resource management
+
+
+
+
+----
+
+1. HPA - horizontal pod scaling
+2. Node autoscaling
+3. Labs to add k8s to real codebase
+
+----
+
+### Ingress
+The problem with load balancing using services is that it cannot do rate limiting. YOu want to have a single load balancer, such that even if the path is differerent or domain you reroute the path accordingly to the respective pod. This is where ingress controller comes. It is different from kubernetes abstraction and ingress controller doesn't come in default with kubernetes cluster.
+
+### Namespaces
+lets you divide clusters betweeen multiple users and teams.Namespaces are meant to be used in environments where multiple users are spead across mutliple teams or projects
+
+
+```bash
+kubectl create namespace backend--tech
+kubectl get namespaces
+
+kubectl get pods -n my-namespaces 
+kubectl get pods --all-namespaces
+
+```
+you can add namespace to a deployment by adding the attirbute namespace in the configuration file
+
+to intall nginx you need to install helm package. 
+
+```bash
+winget install Helm.Helm
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install nginx-ingress ingress-nginx/ingress-nginx
+
+```

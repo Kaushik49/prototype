@@ -1,8 +1,7 @@
 apiVersion: apps/v1
-kind: Deployment # deployment to be created in cluster
+kind: ReplicaSet # deployment to be created in cluster
 metadata:
-  name: nginx-deployment # name of the deployment 
-  namespace: backend ## assigning a namespace to the deployment
+  name: nginx-replicaset # name of the deployment 
 spec: # specification of the deployment
   replicas: 3
   selector: # how to find those pods deployemnent has created
