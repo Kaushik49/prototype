@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+
+kind: Deployment
+metadata: 
+  name: econ-backend-Deployment
+spec:
+  replaces: 1
+  selector:
+    mathcLabels:
+      app: ecom-backend
+    templates:
+      metadata:
+        labels:
+          app: ecom-backend
+      containers:
+        - name : ecom-backend
+          image: 100xdevs/env-backend
+          volumeMounts: # volume you want to access. 
+          - name: env-file
+            readOnly: true
+            mountPath:"/etc/secret-volume"
+          ports:
+          - containerPort: 3000
+          env:
+          - name: DATABASE_URL # name of the environment variable
+            valueFrom: # where to pick the value from 
+              configMapKeyRef: # key value pair 
+                name: ecom-backend-config # name of the config Map kind file
+                key: database_url # name of the key 
+          - name: DATABASE_PASSWORD # name of the environment variable
+            valueFrom: # where to pick the value from 
+              sercretKeyRef: # key value pair from secret key file
+                name: ecom-backend-secret # name of the secret Map kind file
+                key: database_password
+      volume: # all the volumes your container can access
+        - name: env-file # name of the volume
+          secret:
+            secretName: dotfile-secret environment file

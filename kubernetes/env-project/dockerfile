@@ -1,0 +1,19 @@
+# use the official node js image
+
+FROM node:20
+
+# create and set the working directory
+WORKDIR /usr/src/app
+
+# copy the package.json and package-lock.json
+COPY package*.json
+
+# install the dependencies if there are any
+RUN npm install
+
+# Copy the rest of the application code
+COPY ..
+
+# command to run the nodjs script
+
+CMD["node","index.js"]
