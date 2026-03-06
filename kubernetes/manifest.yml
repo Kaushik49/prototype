@@ -1,0 +1,10 @@
+apiVersion: v1        # The stable core API version for Pods
+kind: Pod             # Telling K8s we want to create a Pod
+metadata:
+  name: nginx         # The unique name of your Pod in the namespace
+spec:                 # The "Desired State" of the Pod
+  containers:
+  - name: nginx       # Name of the specific container
+    image: nginx      # The Docker Hub image to pull (typo fixed here)
+    ports:
+    - containerPort: 80 # The port the app inside the container listens on

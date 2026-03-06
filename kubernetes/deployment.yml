@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment # deployment to be created in cluster
+metadata:
+  name: nginx-deployment # name of the deployment 
+spec: # specification of the deployment
+  replicas: 3
+  selector: # how to find those pods deployemnent has created
+    matchLabels:
+      app: nginx
+  template: # assign these labels to the pods.
+    metadata:
+      labels:
+        app: nginx
+    spec:              # 1. Removed the 's' (must be 'spec')
+      containers:
+      - name: nginx
+        image: nginx:latest  # 2. Indented to align under 'name'
+        ports:               # 3. Indented to align under 'name'
+        - containerPort: 80

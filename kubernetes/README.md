@@ -19,7 +19,7 @@ Kubernetes is a container orchestration engine , which lets you create, delete a
 
 the thing that master node starts is a called pod,
 
-![Note]
+>[!Note]
 >pod is not a worker not a container as a single pod can run many containers.Master node is itself a EC2 instance and other worker nodes are EC2 instance as well.
 
 Here what a typical architecture looks like in micro detail. 
@@ -39,4 +39,64 @@ Here was what the subset looks like
 ## Architecture of worker node
 1. Kubelets : that checks the request from api server from the master node.
 2. Kube-proxy : which handles how you can send http request to the abstraction to container.
+
+```bash
+## to create a local container
+kind create cluster --name local
+
+```
+
+To delete a node
+```bash
+kind delete cluster -n local
+```
+You can also create cluster from a yml file
+
+```bash
+kind create cluster --config <cluster.yml> --name local 
+
+```
+all the credential for cluster are stored in ~/.kube/config
+inorder to send your credential along with the http request , you need to use kubectl.
+
+```bash
+
+kubctl get nodes
+kubectl get nodes --v-8
+kubectl get pods #gets the current pods running 
+kubectl run nginx --image=nginx --port=80 #starts a pod
+kubectl logs nginx # to check the logs if pod is running
+kubectl describe pod nginx
+kubectl delete pod nginx # deletes the pod
+kubectl apply -f manifest.yml #to apply the config fi;e 
+```
+
+things learnt
+---
+cluster
+node
+pod
+container
+image
+
+things learnt to left
+---
+Deployment
+replicaSet
+services
+ingress
+configmaps
+---
+
+### Deployment
+A Deployment is a higher level abstraction that manages a set of pods and provides declarative updates to them. If offers features like scaling, rolling updates adn rollback capabilites. If you have run 10 pods , you have to run kubectl run multiple times.It lets you roll back incase there is a failure in the pods. There is also a deployment controller in the master node.
+- A pod is a smalleest object in kubernetes. It represents a single instance of running object in your cluster, typically containing one or more container
+- A deployment is higher level controller that manages a set of identical pods.
+
+```bash
+kubectl create deployment <deployment_name> --image=nginx --replicas=4 # creates a nginx pod with four replica set
+
+```
+
+### Replicasets
 
