@@ -6,7 +6,7 @@ metadata:
 spec:
   replaces: 1
   selector:
-    mathcLabels:
+    matchLabels:
       app: ecom-backend
     templates:
       metadata:

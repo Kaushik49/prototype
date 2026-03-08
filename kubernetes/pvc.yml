@@ -1,0 +1,36 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim #creating peristant volume claims
+metadata:
+  name: nfs-pvc
+spec:
+  accessModes:
+    - ReaderWriteMany # what can you do with volume that has been attached 
+  resources:
+    requests:
+      storage: 10Gi # storage that you are allocating the pod
+    storageClassName: nfs, # for automatic creation of PV in cloud provide just call vultr-block-storage-hdd
+---
+## creating a mongo db container to attach it with the peristant volume 
+# via peristant volume claims
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: mongo-db
+spec:
+  containers:
+  - name: mongo
+    image: mongo
+    ports:
+    - containerPorts: 27017
+    volumeMounts:
+    - mountPath: "/data/db" # where are you acutally mounting the container to
+      name: nfs-volume
+  volumes:
+  - name: nfs-volume # just giving it a label
+    persistantVolumeClaim:
+      className: nfs-pvc # name of the peristant volume that was created at the top
+
+
+
+

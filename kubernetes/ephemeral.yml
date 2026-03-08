@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: shared-volume-deployment
+  namespace: backend 
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: shared-volume-app  # this is how kubectl know pods that are running belong to this deployment
+  template:
+    metadata:
+      labels:
+        app: shared-volume-app # start the pod with the this name
+    spec:
+      containers:
+      - name: writer
+        image: busybox # that continously runs
+        command: ["/bin/sh","-c","echo 'Hello from writer Pod'> /data/hello.txt; sleep 3600"] # run this command inside container, sleep for an hours
+        volumeMounts: # mount the above data to this volume mount
+        - name: shared-data
+          mountPath: /data
+      - name: reader 
+        image: busybox
+        command: ["/bin/sh","-c","cat /data/hello.txt; sleep 3600"] # the container is reading the file
+        volumeMounts: # mounting the volume to the second container
+        - name: shared-data
+          mountPath: /data
+      volumes:
+        - name: shared-data
+          emptyDir: {}

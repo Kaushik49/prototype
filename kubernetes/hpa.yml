@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2
+kind: HorizotalPodAutoscalar
+metadata: 
+  name: cpu-hpa 
+spec:
+  scaleTargetRef:
+    apiVersion: v1
+    kind: Deployment
+    name: cpu-deployment
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resources
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50

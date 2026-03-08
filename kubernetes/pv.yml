@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolume # know the kind that you are creating a volume
+metadata:
+  name: nfs-pv 
+spec:
+  capacity: # allocating storage to the persistant volume
+    storage: 10Gi
+  accessModes:
+    - ReaderWriteMany # what can you do in general with the volume
+  storageClassName: nfs
+  nfs:
+    path: /mongodata # /week26 path or file where you want to store the data
+    server: ip ## ip of the external server which has volume

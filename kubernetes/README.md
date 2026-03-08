@@ -190,4 +190,52 @@ kubernetes suggest some standard configuration practices
 
 1. configmaps: are designed to store non-sensitive configuration data such as configuration files, environment variables or command-line arguments
 2. secrets : are designed to store sensitive information such as passwords , Oauth , tokens and ssh keys. You have to encode it in base64, since it is volatile(you need to update it frequently).You store in final secrets in cloud provider vaults
+3. the volume lets you mount storage of .env files that your kubernetes cluster need when it is running. 
 
+```bash
+
+kubectl apply -f config.yml 
+kubectl apply -f secrets.yml
+
+
+```
+>[!Note]
+> always make sure to set volume mount path in /env path , if the it is kept in the same root directory then it might rewrite the docker file.
+use the dotenv package in the main javascript file to pick .env variable from the /env path. Also try to build docker app from passing the lixu/amd command if you are in windows or mac so that it can run in ubuntu in server
+
+
+in kubernetes , a volume is a directory possibly with some with some data in it , which is accessible to a container of its file system. if there are two containers that exist in a same pop want to share file system, 
+
+
+---
+### Volumes
+- if two container in the same pod want to share data , they need volumes. And if you wan the data to be pesistent
+- if you want to create a database that persists data even when container restarts
+there are varieties of volumes such as emptyDir, PersistantVolume Claim , secret configMap and others
+>[!Note]
+>It exists outside of the kubernetes cluster, so even if nodes or pods go down you just have to mount data when they come back up
+
+1. Ephemeral Volumes: temporary volumes, when the pod dies,the volume dies with it as well
+
+```yml
+volumes:
+  - emptyDir: {} # this creates a volume with is ephemeral
+```
+2. Peristant volumes: Permanent volumes, that does not die if the pod dies. They are typically outside a kubernetes cluster. They have provisioned dynamically by a storage class by an administrator. The lifecycle of peristant volume is greater than pod and can be accessed through an api, it is an api object.
+3. Persistant volume Claims: request for storage by a user. Pods consume node resources but PVC consume volume resources.cloud providers provide a storage system.
+
+```bash
+kubectl logs -f <deployment_name> -c =reader
+kubectl -exec -it -c= reader <deployment_name> /bin/bash
+```
+
+---
+### Horizontal pod autoscaling
+
+if you want to increase or decrease the number of replica's based on the number of request you get. 
+
+
+![HPA architecture](./images/HPA.png)
+- the cadvisor collects the statistics from pod
+- the metrics server collects the health of overall node 
+- the hpa controller reponsible for taking the metrics from different nodes and responsible for autoscaling of the pods
