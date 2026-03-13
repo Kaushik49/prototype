@@ -1,0 +1,9 @@
+/*
+macros ara code that write another code
+
+the single line of code gets expanded to other code
+this is called meta programming
+
+
+
+*/

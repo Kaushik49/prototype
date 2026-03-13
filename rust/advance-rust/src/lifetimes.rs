@@ -6,7 +6,7 @@ fn longest_with_an_announcement<'a, T> (// generic lifetime annotation
     ann:T, 
 ) -> &'a str
 where 
-    T: Display, 
+    T: Display, // just doing the types as Display
     {
         println!("Announcement! {ann}");
         if x.len() > y.len() {
