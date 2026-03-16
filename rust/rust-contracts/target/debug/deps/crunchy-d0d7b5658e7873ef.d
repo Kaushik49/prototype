@@ -1,0 +1,11 @@
+/Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/deps/crunchy-d0d7b5658e7873ef.d: /Users/krishbhandari/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/src/lib.rs /Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/build/crunchy-60b183ab513a869e/out/lib.rs
+
+/Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/deps/libcrunchy-d0d7b5658e7873ef.rlib: /Users/krishbhandari/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/src/lib.rs /Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/build/crunchy-60b183ab513a869e/out/lib.rs
+
+/Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/deps/libcrunchy-d0d7b5658e7873ef.rmeta: /Users/krishbhandari/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/src/lib.rs /Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/build/crunchy-60b183ab513a869e/out/lib.rs
+
+/Users/krishbhandari/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/crunchy-0.2.4/src/lib.rs:
+/Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/build/crunchy-60b183ab513a869e/out/lib.rs:
+
+# env-dep:CRUNCHY_LIB_SUFFIX=/lib.rs
+# env-dep:OUT_DIR=/Users/krishbhandari/Downloads/prototype/rust/rust-contracts/target/debug/build/crunchy-60b183ab513a869e/out
